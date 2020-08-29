@@ -8,8 +8,9 @@ public class PlayerController : MonoBehaviour {
     public Transform isGroundedChecker; 
     public float checkGroundRadius = 0.5f; 
     public LayerMask groundLayer;
-    public GameObject playerSprite = null;
+    public Transform playerTransform = null;
     public float speed = 1;
+    public Animator playerMovement = null;
     private bool faceRight = true;
     
     #region ground checker
@@ -49,26 +50,29 @@ public class PlayerController : MonoBehaviour {
         // rb.velocity = new Vector2(moveBy, rb.velocity.y); 
         
         transform.position += Vector3.right * Input.GetAxis ("Horizontal") * speed * Time.deltaTime;
-
+        Animation();
         // Change direction
         ChangeDirection();
 
+    }
+    void Animation()
+    {
+        playerMovement.SetBool("isWalking", Input.GetAxis ("Horizontal") != 0);
     }
     void ChangeDirection()
     {
         bool moveToRight = Input.GetAxis ("Horizontal") > 0;
         bool moveToLeft = Input.GetAxis ("Horizontal") < 0;
-        SpriteRenderer SR = playerSprite.GetComponent<SpriteRenderer>();
 
         if (moveToRight && faceRight != true)
         {
             faceRight = true;
-            SR.flipX = false;
+            playerTransform.localScale = new Vector3(- playerTransform.localScale.x, playerTransform.localScale.y, playerTransform.localScale.z);
         } 
         else if (moveToLeft && faceRight == true)
         {
             faceRight = false;
-            SR.flipX = true;
+            playerTransform.localScale = new Vector3(- playerTransform.localScale.x, playerTransform.localScale.y, playerTransform.localScale.z);
         }
     }
     void OnTriggerEnter (Collider other)
