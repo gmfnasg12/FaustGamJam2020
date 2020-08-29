@@ -18,6 +18,14 @@ public class Controller : MonoBehaviour
         }
     }
 
+    void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            PlayerEnterControllerCheck();
+        }
+    }
+
     void PlayerEnterControllerCheck()
     {
         if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter))
