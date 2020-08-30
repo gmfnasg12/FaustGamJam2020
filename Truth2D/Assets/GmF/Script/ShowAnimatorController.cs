@@ -9,6 +9,7 @@ public class ShowAnimatorController : ShowController
     int showAnimationNameIndex = 0;
     public bool DisableHideAnimator = false;
     public string InitAnimatorName = "";
+    public bool WattingAnimPlayEnd = true;
 
     public override void Awake()
     {
@@ -37,6 +38,12 @@ public class ShowAnimatorController : ShowController
         }
         if(animator == null)
         {
+            return;
+        }
+
+        if(WattingAnimPlayEnd && animator.GetCurrentAnimatorStateInfo(0).IsName(AnimationNames[showAnimationNameIndex]))
+        {
+            ///等待目前動畫結束
             return;
         }
 

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Controller : MonoBehaviour
 {
+    public bool isAuto = false;
+    public List<KeyCode> KeyCodes = new List<KeyCode>();
+    bool useMouseRightClick = false;
 
     public virtual void Awake()
     {
@@ -28,10 +31,23 @@ public class Controller : MonoBehaviour
 
     void PlayerEnterControllerCheck()
     {
-        if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter))
+        if(isAuto || CheckKeys() || (useMouseRightClick && Input.GetMouseButtonDown(0)) )
         {
             Do();
         }
+    }
+
+    bool CheckKeys()
+    {
+        foreach(KeyCode key in KeyCodes)
+        {
+            if (Input.GetKeyDown(key))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public virtual void Do()
