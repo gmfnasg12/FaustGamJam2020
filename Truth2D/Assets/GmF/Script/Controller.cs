@@ -6,11 +6,17 @@ public class Controller : MonoBehaviour
 {
     public bool isAuto = false;
     public List<KeyCode> KeyCodes = new List<KeyCode>();
-    bool useMouseRightClick = false;
+    public bool useMouseRightClick = true;
+    public List<string> DoUnitTags = new List<string>();
 
     public virtual void Awake()
     {
-        
+        ControllerManager.RegistController(this);
+    }
+
+    public void OnDestroy()
+    {
+        ControllerManager.UnRegistController(this);
     }
 
     void OnTriggerStay2D(Collider2D other)
@@ -19,6 +25,8 @@ public class Controller : MonoBehaviour
         {
             PlayerEnterControllerCheck();
         }
+
+        CheckDoUnitTag(other.gameObject);
     }
 
     void OnTriggerStay(Collider other)
@@ -27,6 +35,26 @@ public class Controller : MonoBehaviour
         {
             PlayerEnterControllerCheck();
         }
+
+        CheckDoUnitTag(other.gameObject);
+    }
+
+    bool CheckDoUnitTag(GameObject gameObject)
+    {
+        UnitBase unit = UnitManager.GetUnitByGameObject(gameObject);
+        if (unit != null)
+        {
+            foreach (string unitTag in DoUnitTags)
+            {
+                if (unit.UnitTags.Contains(unitTag))
+                {
+                    Do();
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     void PlayerEnterControllerCheck()
